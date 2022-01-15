@@ -25,8 +25,11 @@ class Rugit
   def hash_object
     return if @args[1].nil?
 
+    content = File.read(@args[1])
     oid = Digest::SHA1.hexdigest @args[1]
-    File.open("#{GIT_DIR}/objects/#{oid}", 'wb')
+    File.open("#{GIT_DIR}/objects/#{oid}", 'wb') do |f|
+      f.write content
+    end
   end
 end
 
