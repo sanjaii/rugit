@@ -4,6 +4,8 @@ require 'digest/sha1'
 
 # All the rugit functionalities implemented in this class.
 class Rugit
+  attr_reader :args
+
   GIT_DIR = '.rugit'
 
   def initialize(args)
@@ -23,11 +25,11 @@ class Rugit
   end
 
   def hash_object
-    return if @args[1].nil?
-    return  unless File.exist?(@args[1])
+    return if args[1].nil?
+    return  unless File.exist?(args[1])
 
-    content = File.read(@args[1])
-    oid = Digest::SHA1.hexdigest @args[1]
+    content = File.read(args[1])
+    oid = Digest::SHA1.hexdigest args[1]
     File.open("#{GIT_DIR}/objects/#{oid}", 'wb') do |f|
       f.write content
     end
