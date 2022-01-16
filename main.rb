@@ -2,7 +2,7 @@
 
 require 'digest/sha1'
 
-# All the rugit functionalities Implemented in this class
+# All the rugit functionalities implemented in this class.
 class Rugit
   GIT_DIR = '.rugit'
 
@@ -24,6 +24,7 @@ class Rugit
 
   def hash_object
     return if @args[1].nil?
+    return  unless File.exist?(@args[1])
 
     content = File.read(@args[1])
     oid = Digest::SHA1.hexdigest @args[1]
