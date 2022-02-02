@@ -23,7 +23,8 @@ class Rugit
   end
 
   def hash_object
-    return unless initialized_repo?
+    raise StandardError, 'This is not a git repository' unless initialized_repo?
+
     return if args[1].nil?
     return  unless File.exist?(args[1])
 
