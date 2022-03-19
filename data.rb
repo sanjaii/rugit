@@ -35,6 +35,15 @@ class Rugit
     end
   end
 
+  def cat_file
+    raise StandardError, 'This is not a git repository' unless initialized_repo?
+    return if args[1].nil?
+    return unless File.exist?("#{GIT_DIR}/objects/#{args[1]}")
+
+    content = File.read("#{GIT_DIR}/objects/#{args[1]}")
+    puts content
+  end
+
   def initialized_repo?
     File.exist?(GIT_DIR)
   end
