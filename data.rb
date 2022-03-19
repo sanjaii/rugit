@@ -23,8 +23,7 @@ class Rugit
   end
 
   def hash_object
-    raise StandardError, 'This is not a git repository' unless initialized_repo?
-
+    git_repository?
     return if args[1].nil?
     return  unless File.exist?(args[1])
 
@@ -36,12 +35,16 @@ class Rugit
   end
 
   def cat_file
-    raise StandardError, 'This is not a git repository' unless initialized_repo?
+    git_repository?
     return if args[1].nil?
     return unless File.exist?("#{GIT_DIR}/objects/#{args[1]}")
 
     content = File.read("#{GIT_DIR}/objects/#{args[1]}")
     puts content
+  end
+
+  def git_repository?
+    raise StandardError, 'This is not a git repository' unless initialized_repo?
   end
 
   def initialized_repo?
