@@ -21,8 +21,10 @@ class Rugit
     end
   end
 
-  def read_object(obj)
-    content = File.read("#{GIT_DIR}/objects/#{obj}").split("\u0000")
-    puts content[1]
+  def read_object(obj, expected = 'blob')
+    type, content = File.read("#{GIT_DIR}/objects/#{obj}").split("\u0000")
+    puts content
+
+    "Expected #{expected}, got #{type}" if !expected.nil? && (type == expected)
   end
 end

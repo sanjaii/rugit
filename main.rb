@@ -33,6 +33,6 @@ if $PROGRAM_NAME == __FILE__ && !ARGV[0].nil?
     return if args[1].nil?
     return unless File.exist?("#{GIT_DIR}/objects/#{args[1]}")
 
-    Rugit.new.read_object(args[1])
+    Rugit.new.read_object(args[1], nil)
   end
 end
