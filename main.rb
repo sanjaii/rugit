@@ -1,38 +1,41 @@
 # frozen_string_literal: true
 
+require 'optparse'
 require_relative 'data'
 
 def git_repository?
-  raise StandardError, 'This is not a git repository' unless initialized_repo?
+  initialized_repo?
 end
 
 def initialized_repo?
   File.exist?(GIT_DIR)
 end
 
+def log(end_notes)
+  p end_notes
+  exit
+end
+
+GIT_DIR = '.rugit'
+
+subcommands = { 'init' => 'init', 'hash-object' => 'hash_object', 'cat-file' => 'read_object' }
+
 if $PROGRAM_NAME == __FILE__ && !ARGV[0].nil?
   args = ARGV
-  GIT_DIR = '.rugit'
-
   case args[0]
   when 'init'
-    if File.exist?(GIT_DIR)
-      p 'Already a rgit repository'
-      return
-    end
-    Rugit.new.init
+    log('Already a rugit repository') if git_repository?
 
+    Rugit.new.send(subcommands[args[0]])
   when 'hash-object'
-    git_repository?
-    return if args[1].nil?
-    return unless File.exist?(args[1])
+    log('This is not a rugit repository') unless git_repository?
+    log('Insufficient arguments') if args[1].nil?
 
-    Rugit.new.hash_object(args[1])
+    Rugit.new.send(subcommands[args[0]], args[1..args.length])
   when 'cat-file'
-    git_repository?
-    return if args[1].nil?
-    return unless File.exist?("#{GIT_DIR}/objects/#{args[1]}")
+    log('This is not a git_repository') unless git_repository?
+    log('Insufficient arguments') if args[1].nil?
 
-    Rugit.new.read_object(args[1], nil)
+    Rugit.new.send(subcommands[args[0]], args[1..args.length], nil)
   end
 end

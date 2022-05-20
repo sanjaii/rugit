@@ -13,16 +13,17 @@ class Rugit
     p 'Initialized a git repository'
   end
 
-  def hash_object(file, type = 'blob')
-    obj = (type.encode << 0) + File.read(file)
-    oid = Digest::SHA1.hexdigest file
+  def hash_object(args, type = 'blob')
+    obj = (type.encode << 0) + File.read(args[0])
+    oid = Digest::SHA1.hexdigest args[0]
+    p "Hashing the content of the file #{args[0]} using SHA-1"
     File.open("#{GIT_DIR}/objects/#{oid}", 'wb') do |f|
       f.write obj
     end
   end
 
-  def read_object(obj, expected = 'blob')
-    type, content = File.read("#{GIT_DIR}/objects/#{obj}").split("\u0000")
+  def read_object(args, expected = 'blob')
+    type, content = File.read("#{GIT_DIR}/objects/#{args[0]}").split("\u0000")
     puts content
 
     "Expected #{expected}, got #{type}" if !expected.nil? && (type == expected)
